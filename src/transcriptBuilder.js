@@ -38,9 +38,14 @@ function effectiveSize(att) {
 }
 
 function classifyForRender(att, threshold) {
+  if (att.kind === 'image' || att.kind === 'binary') return 'manifest';
   if (att.kind !== 'text') return 'skip';
   if (!att.extractedContent) return 'manifest';
   return effectiveSize(att) <= threshold ? 'inline' : 'manifest';
+}
+
+function manifestIndicator(att) {
+  return att.kind === 'image' ? 'image' : 'file';
 }
 
 function labelFor(sender, promptNumber) {
@@ -76,7 +81,10 @@ function collectManifest(messages, threshold) {
     if (msg.sender !== 'user') continue;
     for (const att of msg.attachments ?? []) {
       if (classifyForRender(att, threshold) === 'manifest') {
-        userFiles.push({ name: att.name || '(pasted content)', indicator: 'file' });
+        userFiles.push({
+          name: att.name || '(pasted content)',
+          indicator: manifestIndicator(att),
+        });
       }
     }
   }

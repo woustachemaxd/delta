@@ -281,18 +281,99 @@ describe('TranscriptBuilder — text attachments with no extracted content', () 
   });
 });
 
-describe('TranscriptBuilder — non-text attachments are ignored in slice 05', () => {
-  it('does not touch image or binary attachments yet (slice 06 territory)', () => {
+describe('TranscriptBuilder — image attachments go to manifest', () => {
+  it('lists an image with an (image) indicator in the manifest', () => {
     const conv = makeConv([
-      userMsg('u1', 'has image', [
+      userMsg('u1', 'look at this', [
         { uuid: 'i', name: 'pic.png', kind: 'image', extractedContent: null, sizeBytes: 1000 },
-        { uuid: 'b', name: 'doc.pdf', kind: 'binary', extractedContent: null, sizeBytes: 2000 },
       ]),
     ]);
     const out = build(conv);
-    expect(out).not.toContain('pic.png');
-    expect(out).not.toContain('doc.pdf');
-    expect(out).not.toContain(MANIFEST_USER_HEADING);
+    expect(out).toContain(MANIFEST_USER_HEADING);
+    expect(out).toContain('`pic.png` (image)');
+  });
+
+  it('never inlines an image, regardless of size', () => {
+    const conv = makeConv([
+      userMsg('u1', 'tiny pic', [
+        { uuid: 'i', name: 'tiny.png', kind: 'image', extractedContent: null, sizeBytes: 100 },
+      ]),
+    ]);
+    const out = build(conv);
+    expect(out).not.toContain('Attached file: tiny.png');
+    expect(out).not.toContain('```');
+  });
+});
+
+describe('TranscriptBuilder — binary attachments go to manifest', () => {
+  it('lists a PDF with a (file) indicator in the manifest', () => {
+    const conv = makeConv([
+      userMsg('u1', 'read this', [
+        { uuid: 'b', name: 'doc.pdf', kind: 'binary', extractedContent: null, sizeBytes: 5000 },
+      ]),
+    ]);
+    const out = build(conv);
+    expect(out).toContain(MANIFEST_USER_HEADING);
+    expect(out).toContain('`doc.pdf` (file)');
+  });
+
+  it('never inlines a binary attachment', () => {
+    const conv = makeConv([
+      userMsg('u1', 'binary', [
+        { uuid: 'b', name: 'data.bin', kind: 'binary', extractedContent: null, sizeBytes: 50 },
+      ]),
+    ]);
+    const out = build(conv);
+    expect(out).not.toContain('Attached file: data.bin');
+    expect(out).not.toContain('```');
+  });
+});
+
+describe('TranscriptBuilder — mixed image, binary, and text attachments', () => {
+  const huge = 'x'.repeat(INLINE_TEXT_THRESHOLD_BYTES + 1);
+  const conv = makeConv([
+    userMsg('u1', 'mixed', [
+      { uuid: 'i', name: 'photo.jpg', kind: 'image', extractedContent: null, sizeBytes: 2000 },
+      { uuid: 'b', name: 'manual.pdf', kind: 'binary', extractedContent: null, sizeBytes: 5000 },
+      textAttachment('snippet.md', 'tiny snippet'),
+      textAttachment('giant.md', huge),
+    ]),
+    claudeMsg('c1', 'ok'),
+  ]);
+  const out = build(conv);
+
+  it('inlines only the small text attachment', () => {
+    expect(out).toContain('Attached file: snippet.md');
+    expect(out).toContain('tiny snippet');
+  });
+
+  it('lists image, binary, and large text in one manifest sub-section', () => {
+    expect(out).toContain('`photo.jpg` (image)');
+    expect(out).toContain('`manual.pdf` (file)');
+    expect(out).toContain('`giant.md` (file)');
+  });
+
+  it('renders a single Files I attached: header', () => {
+    const matches = out.match(new RegExp(MANIFEST_USER_HEADING, 'g'));
+    expect(matches).toHaveLength(1);
+  });
+
+  it('renders the trailing instruction exactly once', () => {
+    const matches = out.match(
+      new RegExp(
+        MANIFEST_TRAILING_INSTRUCTION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        'g',
+      ),
+    );
+    expect(matches).toHaveLength(1);
+  });
+
+  it('preserves encounter order within the manifest list', () => {
+    const photoIdx = out.indexOf('`photo.jpg`');
+    const manualIdx = out.indexOf('`manual.pdf`');
+    const giantIdx = out.indexOf('`giant.md`');
+    expect(photoIdx).toBeLessThan(manualIdx);
+    expect(manualIdx).toBeLessThan(giantIdx);
   });
 });
 
@@ -307,5 +388,13 @@ describe('TranscriptBuilder — attachments fixture', () => {
   it('lists the .md file that has no extracted content in the manifest', () => {
     expect(out).toContain('INGESTION_LOG');
     expect(out).toContain(MANIFEST_USER_HEADING);
+  });
+
+  it('lists the image attachment with an (image) indicator', () => {
+    expect(out).toMatch(/`.*image.*\.png` \(image\)/);
+  });
+
+  it('lists the pdf attachment with a (file) indicator', () => {
+    expect(out).toMatch(/`.*book\.pdf` \(file\)/);
   });
 });
