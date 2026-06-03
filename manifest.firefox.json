@@ -1,0 +1,25 @@
+{
+  "manifest_version": 3,
+  "name": "Claude Web Ext",
+  "version": "0.1.0",
+  "description": "Companion features for the Claude web UI.",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "claude-web-ext@deepanshu.local",
+      "strict_min_version": "121.0"
+    }
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://claude.ai/chat/*"],
+      "js": ["vendor/turndown.js", "vendor/turndown-plugin-gfm.js", "loader.js"],
+      "css": ["src/styles.css"]
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": ["src/*.js"],
+      "matches": ["https://claude.ai/*"]
+    }
+  ]
+}
