@@ -97,9 +97,11 @@ function injectActions({ container, content }) {
   const actions = document.createElement('div');
   actions.className = 'cwe-actions';
 
-  actions.appendChild(buildButton('Plain', () => writePlain(formatter.plain(content))));
-  actions.appendChild(buildButton('MD', () => writePlain(formatter.markdown(content))));
-  actions.appendChild(
+  const copyRow = document.createElement('div');
+  copyRow.className = 'cwe-actions-row';
+  copyRow.appendChild(buildButton('Plain', () => writePlain(formatter.plain(content))));
+  copyRow.appendChild(buildButton('MD', () => writePlain(formatter.markdown(content))));
+  copyRow.appendChild(
     buildButton('Rich', () =>
       writeRich({
         html: formatter.html(content),
@@ -107,8 +109,13 @@ function injectActions({ container, content }) {
       }),
     ),
   );
-  actions.appendChild(buildBranchButton(container));
 
+  const branchRow = document.createElement('div');
+  branchRow.className = 'cwe-actions-row';
+  branchRow.appendChild(buildBranchButton(container));
+
+  actions.appendChild(copyRow);
+  actions.appendChild(branchRow);
   container.appendChild(actions);
 }
 
