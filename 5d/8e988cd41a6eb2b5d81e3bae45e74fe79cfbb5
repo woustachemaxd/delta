@@ -1,0 +1,35 @@
+src/constants.js
+  s_4d9c311ca3f956::t_68e9700155c130 8-29
+src/conversationClient.js
+  s_4d9c311ca3f956::t_112584717cf4ee 1-147,150,153-157,159-160,166-167,193-194,198-199,201
+  s_4d9c311ca3f956::t_a7de9829695e39 148-149,151-152,158,161-165,168-192,195-197,200
+tests/conversationClient.test.js
+  s_4d9c311ca3f956::t_2c8a7018b4b1a7 1-107
+src/styles.css
+  s_4d9c311ca3f956::t_408d6a1151d68d 61-230
+tests/transcriptBuilder.test.js
+  s_4d9c311ca3f956::t_ebabb7662c2d21 1-95
+src/branchModal.js
+  s_4d9c311ca3f956::t_778a13c457a630 1-158
+src/content.js
+  s_4d9c311ca3f956::t_8cdff9eeca9a93 74
+  s_4d9c311ca3f956::t_7595b686ceb46a 4-7,14-30,35,54-73,75-95,102-110
+src/transcriptBuilder.js
+  s_4d9c311ca3f956::t_d9b84e0efb2d25 1-46
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "5d8e988cd41a6eb2b5d81e3bae45e74fe79cfbb5",
+  "prompts": {},
+  "sessions": {
+    "s_4d9c311ca3f956": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "acc04715-81ec-41c9-a0e9-419cd06e73a2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "deepanshu <deepanshu1115@gmail.com>"
+    }
+  }
+}
