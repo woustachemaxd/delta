@@ -1,31 +1,31 @@
 function buildShell() {
   const backdrop = document.createElement('div');
-  backdrop.className = 'cwe-modal-backdrop';
+  backdrop.className = 'delta-modal-backdrop';
 
   const dialog = document.createElement('div');
-  dialog.className = 'cwe-modal';
+  dialog.className = 'delta-modal';
   dialog.setAttribute('role', 'dialog');
   dialog.setAttribute('aria-modal', 'true');
   dialog.setAttribute('aria-label', 'Branch from here');
 
   const header = document.createElement('div');
-  header.className = 'cwe-modal-header';
+  header.className = 'delta-modal-header';
   const title = document.createElement('div');
-  title.className = 'cwe-modal-title';
+  title.className = 'delta-modal-title';
   title.textContent = 'Branch from here';
   const closeBtn = document.createElement('button');
   closeBtn.type = 'button';
-  closeBtn.className = 'cwe-modal-icon-btn';
+  closeBtn.className = 'delta-modal-icon-btn';
   closeBtn.setAttribute('aria-label', 'Close');
   closeBtn.textContent = '×';
   header.appendChild(title);
   header.appendChild(closeBtn);
 
   const body = document.createElement('div');
-  body.className = 'cwe-modal-body';
+  body.className = 'delta-modal-body';
 
   const footer = document.createElement('div');
-  footer.className = 'cwe-modal-footer';
+  footer.className = 'delta-modal-footer';
 
   dialog.appendChild(header);
   dialog.appendChild(body);
@@ -50,7 +50,7 @@ function downloadText(text, filename) {
 function makeActionButton(label) {
   const btn = document.createElement('button');
   btn.type = 'button';
-  btn.className = 'cwe-modal-btn';
+  btn.className = 'delta-modal-btn';
   btn.textContent = label;
   return btn;
 }
@@ -69,7 +69,7 @@ export function openTranscriptModal(transcript, { filename = 'claude-branch.txt'
   const { backdrop, body, footer, closeBtn } = buildShell();
 
   const textarea = document.createElement('textarea');
-  textarea.className = 'cwe-modal-textarea';
+  textarea.className = 'delta-modal-textarea';
   textarea.readOnly = true;
   textarea.value = transcript;
   body.appendChild(textarea);
@@ -86,7 +86,7 @@ export function openTranscriptModal(transcript, { filename = 'claude-branch.txt'
       await navigator.clipboard.writeText(transcript);
       flash(copyBtn, 'Copied!');
     } catch (err) {
-      console.error('[cwe] modal copy failed', err);
+      console.error('[delta] modal copy failed', err);
       flash(copyBtn, 'Failed');
     }
   });
@@ -96,7 +96,7 @@ export function openTranscriptModal(transcript, { filename = 'claude-branch.txt'
       downloadText(transcript, filename);
       flash(downloadBtn, 'Saved!');
     } catch (err) {
-      console.error('[cwe] modal download failed', err);
+      console.error('[delta] modal download failed', err);
       flash(downloadBtn, 'Failed');
     }
   });
@@ -125,12 +125,12 @@ export function openErrorModal(message) {
   const { backdrop, body, footer, closeBtn } = buildShell();
 
   const errorBox = document.createElement('div');
-  errorBox.className = 'cwe-modal-error';
+  errorBox.className = 'delta-modal-error';
   const heading = document.createElement('div');
-  heading.className = 'cwe-modal-error-heading';
+  heading.className = 'delta-modal-error-heading';
   heading.textContent = "Couldn't build the transcript";
   const detail = document.createElement('div');
-  detail.className = 'cwe-modal-error-detail';
+  detail.className = 'delta-modal-error-detail';
   detail.textContent = message || 'Unknown error.';
   errorBox.appendChild(heading);
   errorBox.appendChild(detail);

@@ -9,7 +9,7 @@ export function createInjector(onMount, options = {}) {
     try {
       messages = document.querySelectorAll(selectors.CLAUDE_MESSAGE);
     } catch (err) {
-      console.error('[cwe] injector: bad CLAUDE_MESSAGE selector', err);
+      console.error('[delta] injector: bad CLAUDE_MESSAGE selector', err);
       return;
     }
     for (const msg of messages) {
@@ -22,7 +22,7 @@ export function createInjector(onMount, options = {}) {
         msg.setAttribute(markerAttr, 'true');
         onMount({ container: msg, content });
       } catch (err) {
-        console.error('[cwe] injector: mount failed for a message; skipping', err);
+        console.error('[delta] injector: mount failed for a message; skipping', err);
       }
     }
   }
@@ -38,7 +38,7 @@ export function createInjector(onMount, options = {}) {
         attributeFilter: ['data-is-streaming'],
       });
     } catch (err) {
-      console.error('[cwe] injector: failed to start observer', err);
+      console.error('[delta] injector: failed to start observer', err);
     }
     mountAll();
   }

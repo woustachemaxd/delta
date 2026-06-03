@@ -31,7 +31,7 @@ function buildButton(label, onClick, { variant } = {}) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.textContent = label;
-  btn.className = 'cwe-copy-btn';
+  btn.className = 'delta-copy-btn';
   if (variant) btn.dataset.variant = variant;
   btn.addEventListener('click', async () => {
     try {
@@ -41,7 +41,7 @@ function buildButton(label, onClick, { variant } = {}) {
     } catch (err) {
       btn.textContent = 'Failed';
       btn.dataset.state = 'error';
-      console.error(`[cwe] ${label} copy failed`, err);
+      console.error(`[delta] ${label} copy failed`, err);
     }
     setTimeout(() => {
       btn.textContent = label;
@@ -55,7 +55,7 @@ function buildBranchButton(container) {
   const btn = document.createElement('button');
   btn.type = 'button';
   btn.textContent = 'Branch from here';
-  btn.className = 'cwe-copy-btn';
+  btn.className = 'delta-copy-btn';
   btn.dataset.variant = 'branch';
   btn.addEventListener('click', async () => {
     if (btn.dataset.state === 'loading') return;
@@ -83,7 +83,7 @@ function buildBranchButton(container) {
       const transcript = buildTranscript(conv, target.uuid);
       openTranscriptModal(transcript, { filename: safeFilename(conv.title) });
     } catch (err) {
-      console.error('[cwe] branch failed', err);
+      console.error('[delta] branch failed', err);
       openErrorModal(err?.message || String(err));
     } finally {
       btn.removeAttribute('data-state');
@@ -95,10 +95,10 @@ function buildBranchButton(container) {
 
 function injectActions({ container, content }) {
   const actions = document.createElement('div');
-  actions.className = 'cwe-actions';
+  actions.className = 'delta-actions';
 
   const copyRow = document.createElement('div');
-  copyRow.className = 'cwe-actions-row';
+  copyRow.className = 'delta-actions-row';
   copyRow.appendChild(buildButton('Plain', () => writePlain(formatter.plain(content))));
   copyRow.appendChild(buildButton('MD', () => writePlain(formatter.markdown(content))));
   copyRow.appendChild(
@@ -111,7 +111,7 @@ function injectActions({ container, content }) {
   );
 
   const branchRow = document.createElement('div');
-  branchRow.className = 'cwe-actions-row';
+  branchRow.className = 'delta-actions-row';
   branchRow.appendChild(buildBranchButton(container));
 
   actions.appendChild(copyRow);
