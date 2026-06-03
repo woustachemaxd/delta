@@ -1,30 +1,51 @@
 import { SELECTORS, MOUNT_MARKER_ATTR } from './constants.js';
 
-export function createInjector(onMount) {
+export function createInjector(onMount, options = {}) {
+  const selectors = options.selectors ?? SELECTORS;
+  const markerAttr = options.markerAttr ?? MOUNT_MARKER_ATTR;
+
   function mountAll() {
-    const messages = document.querySelectorAll(SELECTORS.CLAUDE_MESSAGE);
+    let messages;
+    try {
+      messages = document.querySelectorAll(selectors.CLAUDE_MESSAGE);
+    } catch (err) {
+      console.error('[cwe] injector: bad CLAUDE_MESSAGE selector', err);
+      return;
+    }
     for (const msg of messages) {
-      if (msg.hasAttribute(MOUNT_MARKER_ATTR)) continue;
-      const streamingDiv = msg.querySelector(SELECTORS.STREAMING_DIV);
-      if (streamingDiv?.getAttribute('data-is-streaming') === 'true') continue;
-      const content = msg.querySelector(SELECTORS.RESPONSE_CONTENT);
-      if (!content) continue;
-      msg.setAttribute(MOUNT_MARKER_ATTR, 'true');
-      onMount({ container: msg, content });
+      try {
+        if (msg.hasAttribute(markerAttr)) continue;
+        const streamingDiv = msg.querySelector(selectors.STREAMING_DIV);
+        if (streamingDiv?.getAttribute('data-is-streaming') === 'true') continue;
+        const content = msg.querySelector(selectors.RESPONSE_CONTENT);
+        if (!content) continue;
+        msg.setAttribute(markerAttr, 'true');
+        onMount({ container: msg, content });
+      } catch (err) {
+        console.error('[cwe] injector: mount failed for a message; skipping', err);
+      }
     }
   }
 
   const observer = new MutationObserver(() => mountAll());
 
   function start() {
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true,
-      attributes: true,
-      attributeFilter: ['data-is-streaming'],
-    });
+    try {
+      observer.observe(document.body, {
+        childList: true,
+        subtree: true,
+        attributes: true,
+        attributeFilter: ['data-is-streaming'],
+      });
+    } catch (err) {
+      console.error('[cwe] injector: failed to start observer', err);
+    }
     mountAll();
   }
 
-  return { start };
+  function stop() {
+    observer.disconnect();
+  }
+
+  return { start, stop };
 }

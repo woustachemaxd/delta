@@ -49,6 +49,47 @@ describe('TranscriptBuilder — empty conversation', () => {
     expect(out).not.toContain('User Prompt');
     expect(out).not.toContain('Claude Response');
   });
+
+  it('handles null conversation without throwing', () => {
+    expect(() => build(null)).not.toThrow();
+  });
+
+  it('handles a conversation with only a user message (no claude response yet)', () => {
+    const conv = makeConv([userMsg('u1', 'just opened a new chat')]);
+    const out = build(conv);
+    expect(out).toContain('User Prompt 1:');
+    expect(out).toContain('just opened a new chat');
+    expect(out).not.toContain('Claude Response');
+  });
+
+  it('builds a 100-turn conversation without truncation', () => {
+    const messages = [];
+    for (let i = 0; i < 50; i++) {
+      messages.push(userMsg(`u${i}`, `question ${i}`));
+      messages.push(claudeMsg(`c${i}`, `answer ${i}`));
+    }
+    const conv = makeConv(messages);
+    const out = build(conv);
+    expect(out).toContain('User Prompt 1:');
+    expect(out).toContain('User Prompt 50:');
+    expect(out).toContain('Claude Response to User Prompt 50:');
+    expect(out).toContain('question 49');
+    expect(out).toContain('answer 49');
+  });
+
+  it('renders manifest when slice point is the first message and it carries attachments', () => {
+    const conv = makeConv([
+      userMsg('u1', 'first prompt', [
+        { uuid: 'i', name: 'pic.png', kind: 'image', extractedContent: null, sizeBytes: 1000 },
+      ]),
+      claudeMsg('c1', 'response'),
+    ]);
+    const out = build(conv, 'u1');
+    expect(out).toContain(MANIFEST_USER_HEADING);
+    expect(out).toContain('`pic.png` (image)');
+    expect(out).toContain('User Prompt 1:');
+    expect(out).not.toContain('Claude Response');
+  });
 });
 
 describe('TranscriptBuilder — text-only fixture, full slice', () => {
