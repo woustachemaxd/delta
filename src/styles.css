@@ -1,20 +1,60 @@
 .cwe-actions {
-  margin-top: 8px;
-  display: flex;
-  gap: 6px;
+  margin-top: 6px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .cwe-copy-btn {
-  padding: 4px 10px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 28px;
+  min-width: 64px;
+  padding: 0 12px;
   font-size: 12px;
   font-family: inherit;
-  background-color: #f3f4f6;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  color: rgb(44, 44, 40);
+  font-weight: 500;
+  letter-spacing: 0.01em;
+  background-color: hsl(var(--bg-300));
+  border: 1px solid hsl(var(--border-300, var(--bg-400, 0 0% 100% / 0.08)));
+  border-radius: 8px;
+  color: hsl(var(--text-200));
   cursor: pointer;
+  user-select: none;
+  box-shadow: 0 1px 0 hsl(0 0% 0% / 0.04);
+  transition:
+    background-color 140ms ease,
+    border-color 140ms ease,
+    color 140ms ease,
+    transform 80ms ease;
 }
 
 .cwe-copy-btn:hover {
-  background-color: #e5e7eb;
+  background-color: hsl(var(--bg-400, var(--bg-300)));
+  border-color: hsl(var(--border-300, var(--text-100) / 0.18));
+  color: hsl(var(--text-100));
+}
+
+.cwe-copy-btn:active {
+  transform: scale(0.97);
+}
+
+.cwe-copy-btn:focus-visible {
+  outline: 2px solid hsl(var(--accent-main-100, var(--text-100)));
+  outline-offset: 1px;
+}
+
+.cwe-copy-btn[data-state="success"],
+.cwe-copy-btn[data-state="success"]:hover {
+  background-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.14);
+  border-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.4);
+  color: hsl(var(--accent-main-100, 145 60% 45%));
+}
+
+.cwe-copy-btn[data-state="error"],
+.cwe-copy-btn[data-state="error"]:hover {
+  background-color: hsl(0 70% 50% / 0.14);
+  border-color: hsl(0 70% 50% / 0.4);
+  color: hsl(0 70% 65%);
 }
