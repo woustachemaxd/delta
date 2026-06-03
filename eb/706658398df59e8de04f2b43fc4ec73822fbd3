@@ -1,0 +1,31 @@
+tests/htmlToFormat.test.js
+  s_4d9c311ca3f956::t_37e98a45cc9d8d 19
+  s_4d9c311ca3f956::t_628c08329f8354 70-111
+src/clipboardWriter.js
+  s_4d9c311ca3f956::t_bafccb3afdbcf1 4-11
+src/htmlToFormat.js
+  s_4d9c311ca3f956::t_83315ad767f7f6 26-32
+src/content.js
+  s_4d9c311ca3f956::t_3060ff5c16dbed 2,10,15-18,20-21,23-25,29,37-42
+  s_4d9c311ca3f956::t_8bef3b279d4222 19,22,26-28
+src/styles.css
+  s_4d9c311ca3f956::t_a08429564f12e6 2,5,14,19-22,25,28,34-35,51,58-59
+  s_4d9c311ca3f956::t_9afbb88471da08 9-10,12,17,26,36-39,41-44
+  s_4d9c311ca3f956::t_eb8fd1d7506903 3-4,11,13,18,24,27,29-30,40,45-50,52-57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "eb706658398df59e8de04f2b43fc4ec73822fbd3",
+  "prompts": {},
+  "sessions": {
+    "s_4d9c311ca3f956": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "acc04715-81ec-41c9-a0e9-419cd06e73a2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "deepanshu <deepanshu1115@gmail.com>"
+    }
+  }
+}
