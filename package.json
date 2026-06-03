@@ -1,0 +1,18 @@
+{
+  "name": "claude-web-ext",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "build": "node scripts/build.js",
+    "vendor": "cp node_modules/turndown/dist/turndown.js vendor/turndown.js && cp node_modules/turndown-plugin-gfm/dist/turndown-plugin-gfm.js vendor/turndown-plugin-gfm.js"
+  },
+  "devDependencies": {
+    "jsdom": "^25.0.0",
+    "turndown": "^7.2.0",
+    "turndown-plugin-gfm": "^1.0.2",
+    "vitest": "^2.1.0"
+  }
+}

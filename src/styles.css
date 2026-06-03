@@ -1,0 +1,20 @@
+.cwe-actions {
+  margin-top: 8px;
+  display: flex;
+  gap: 6px;
+}
+
+.cwe-copy-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+  font-family: inherit;
+  background-color: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  color: rgb(44, 44, 40);
+  cursor: pointer;
+}
+
+.cwe-copy-btn:hover {
+  background-color: #e5e7eb;
+}
