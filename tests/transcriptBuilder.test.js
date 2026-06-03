@@ -9,6 +9,7 @@ import {
   OPENING_SPLITTER,
   SPLITTER,
   MANIFEST_USER_HEADING,
+  MANIFEST_CLAUDE_HEADING,
   MANIFEST_TRAILING_INSTRUCTION,
   INLINE_TEXT_THRESHOLD_BYTES,
 } from '../src/constants.js';
@@ -28,8 +29,12 @@ function userMsg(uuid, text, attachments = []) {
   return { uuid, sender: 'user', text, attachments, artifacts: [] };
 }
 
-function claudeMsg(uuid, text) {
-  return { uuid, sender: 'claude', text, attachments: [], artifacts: [] };
+function claudeMsg(uuid, text, artifacts = []) {
+  return { uuid, sender: 'claude', text, attachments: [], artifacts };
+}
+
+function artifact(name, kind = 'text') {
+  return { uuid: `art-${name}`, name, kind, sizeBytes: null };
 }
 
 function textAttachment(name, content, sizeBytes = content.length) {
@@ -374,6 +379,151 @@ describe('TranscriptBuilder — mixed image, binary, and text attachments', () =
     const giantIdx = out.indexOf('`giant.md`');
     expect(photoIdx).toBeLessThan(manualIdx);
     expect(manualIdx).toBeLessThan(giantIdx);
+  });
+});
+
+describe('TranscriptBuilder — Claude artifacts in manifest', () => {
+  it('lists a single Claude artifact in the "Files you (Claude) generated" sub-section with (file)', () => {
+    const conv = makeConv([
+      userMsg('u1', 'make a counter component'),
+      claudeMsg('c1', 'here it is', [artifact('Counter.tsx')]),
+    ]);
+    const out = build(conv);
+    expect(out).toContain(MANIFEST_CLAUDE_HEADING);
+    expect(out).toContain('`Counter.tsx` (file)');
+  });
+
+  it('never inlines artifact contents', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q'),
+      claudeMsg('c1', 'see file', [artifact('readme.md')]),
+    ]);
+    const out = build(conv);
+    expect(out).not.toContain('Attached file: readme.md');
+    expect(out).not.toContain('```markdown');
+  });
+
+  it('uses (file) for all artifact kinds, including images', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q'),
+      claudeMsg('c1', 'here', [artifact('chart.png', 'image')]),
+    ]);
+    const out = build(conv);
+    expect(out).toContain('`chart.png` (file)');
+    expect(out).not.toContain('(image)');
+  });
+
+  it('preserves order across multiple artifacts in one message', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q'),
+      claudeMsg('c1', 'three files', [
+        artifact('first.js'),
+        artifact('second.js'),
+        artifact('third.js'),
+      ]),
+    ]);
+    const out = build(conv);
+    const first = out.indexOf('`first.js`');
+    const second = out.indexOf('`second.js`');
+    const third = out.indexOf('`third.js`');
+    expect(first).toBeLessThan(second);
+    expect(second).toBeLessThan(third);
+  });
+
+  it('preserves order across messages and within messages', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q1'),
+      claudeMsg('c1', 'a1', [artifact('a.js'), artifact('b.js')]),
+      userMsg('u2', 'q2'),
+      claudeMsg('c2', 'a2', [artifact('c.js')]),
+    ]);
+    const out = build(conv);
+    const aIdx = out.indexOf('`a.js`');
+    const bIdx = out.indexOf('`b.js`');
+    const cIdx = out.indexOf('`c.js`');
+    expect(aIdx).toBeLessThan(bIdx);
+    expect(bIdx).toBeLessThan(cIdx);
+  });
+
+  it('renders both manifest sub-sections when user attachments and Claude artifacts coexist', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q', [
+        { uuid: 'i', name: 'pic.png', kind: 'image', extractedContent: null, sizeBytes: 1000 },
+      ]),
+      claudeMsg('c1', 'a', [artifact('out.html')]),
+    ]);
+    const out = build(conv);
+    expect(out).toContain(MANIFEST_USER_HEADING);
+    expect(out).toContain(MANIFEST_CLAUDE_HEADING);
+    expect(out).toContain('`pic.png` (image)');
+    expect(out).toContain('`out.html` (file)');
+  });
+
+  it('renders the trailing instruction once across both sub-sections', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q', [
+        { uuid: 'i', name: 'pic.png', kind: 'image', extractedContent: null, sizeBytes: 1000 },
+      ]),
+      claudeMsg('c1', 'a', [artifact('out.html'), artifact('readme.md')]),
+    ]);
+    const out = build(conv);
+    const matches = out.match(
+      new RegExp(
+        MANIFEST_TRAILING_INSTRUCTION.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        'g',
+      ),
+    );
+    expect(matches).toHaveLength(1);
+  });
+
+  it('orders the user sub-section before the Claude sub-section', () => {
+    const conv = makeConv([
+      userMsg('u1', 'q', [
+        { uuid: 'i', name: 'pic.png', kind: 'image', extractedContent: null, sizeBytes: 1000 },
+      ]),
+      claudeMsg('c1', 'a', [artifact('out.html')]),
+    ]);
+    const out = build(conv);
+    expect(out.indexOf(MANIFEST_USER_HEADING)).toBeLessThan(
+      out.indexOf(MANIFEST_CLAUDE_HEADING),
+    );
+  });
+
+  it('omits the manifest entirely when no attachments and no artifacts exist', () => {
+    const conv = makeConv([
+      userMsg('u1', 'just talk'),
+      claudeMsg('c1', 'sure'),
+    ]);
+    const out = build(conv);
+    expect(out).not.toContain(MANIFEST_USER_HEADING);
+    expect(out).not.toContain(MANIFEST_CLAUDE_HEADING);
+    expect(out).not.toContain(MANIFEST_TRAILING_INSTRUCTION);
+  });
+});
+
+describe('TranscriptBuilder — drop-rule regression (slice 04 contract)', () => {
+  it('does not leak tool_use, tool_result, or thinking content into the transcript', () => {
+    const conv = loadConversation('conv-with-attachments.json');
+    const out = build(conv);
+    expect(out).not.toMatch(/<thinking>/i);
+    expect(out).not.toMatch(/"tool_use"/);
+    expect(out).not.toMatch(/"tool_result"/);
+  });
+});
+
+describe('TranscriptBuilder — artifact fixture', () => {
+  const conv = loadConversation('conv-with-artifact.json');
+  const out = build(conv);
+
+  it('lists each Claude-generated file in the manifest', () => {
+    expect(out).toContain(MANIFEST_CLAUDE_HEADING);
+    expect(out).toContain('`slide-2.jpg` (file)');
+    expect(out).toContain('`slide-3.jpg` (file)');
+  });
+
+  it('does not inline any artifact content', () => {
+    expect(out).not.toContain('Attached file: slide-2.jpg');
+    expect(out).not.toContain('Attached file: slide-3.jpg');
   });
 });
 

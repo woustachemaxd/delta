@@ -3,6 +3,7 @@ import {
   OPENING_SPLITTER,
   SPLITTER,
   MANIFEST_USER_HEADING,
+  MANIFEST_CLAUDE_HEADING,
   MANIFEST_TRAILING_INSTRUCTION,
   INLINE_TEXT_THRESHOLD_BYTES,
 } from './constants.js';
@@ -77,28 +78,40 @@ function renderClaudeTurn(msg, promptNumber) {
 
 function collectManifest(messages, threshold) {
   const userFiles = [];
+  const claudeFiles = [];
   for (const msg of messages) {
-    if (msg.sender !== 'user') continue;
-    for (const att of msg.attachments ?? []) {
-      if (classifyForRender(att, threshold) === 'manifest') {
-        userFiles.push({
-          name: att.name || '(pasted content)',
-          indicator: manifestIndicator(att),
+    if (msg.sender === 'user') {
+      for (const att of msg.attachments ?? []) {
+        if (classifyForRender(att, threshold) === 'manifest') {
+          userFiles.push({
+            name: att.name || '(pasted content)',
+            indicator: manifestIndicator(att),
+          });
+        }
+      }
+    } else if (msg.sender === 'claude') {
+      for (const art of msg.artifacts ?? []) {
+        claudeFiles.push({
+          name: art.name || '(generated)',
+          indicator: 'file',
         });
       }
     }
   }
-  return { userFiles, claudeFiles: [] };
+  return { userFiles, claudeFiles };
+}
+
+function renderManifestSubSection(heading, items) {
+  const lines = [heading];
+  for (const f of items) lines.push(`- \`${f.name}\` (${f.indicator})`);
+  return lines.join('\n');
 }
 
 function renderManifest({ userFiles, claudeFiles }) {
   if (userFiles.length === 0 && claudeFiles.length === 0) return null;
   const sections = [];
-  if (userFiles.length) {
-    const lines = [MANIFEST_USER_HEADING];
-    for (const f of userFiles) lines.push(`- \`${f.name}\` (${f.indicator})`);
-    sections.push(lines.join('\n'));
-  }
+  if (userFiles.length) sections.push(renderManifestSubSection(MANIFEST_USER_HEADING, userFiles));
+  if (claudeFiles.length) sections.push(renderManifestSubSection(MANIFEST_CLAUDE_HEADING, claudeFiles));
   sections.push(MANIFEST_TRAILING_INSTRUCTION);
   return sections.join('\n\n');
 }
