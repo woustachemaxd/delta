@@ -144,23 +144,63 @@ export function normalize(raw) {
   };
 }
 
+function humanMessageForStatus(status, context) {
+  if (status === 401) {
+    return 'Your Claude session expired. Reload claude.ai and try again.';
+  }
+  if (status === 403) {
+    return 'This conversation belongs to an organization your session can\'t access.';
+  }
+  if (status === 404) {
+    return context === 'conversation'
+      ? 'This conversation no longer exists or isn\'t in any of your organizations.'
+      : 'Claude returned 404 for the organization list.';
+  }
+  if (status >= 500 && status < 600) {
+    return `Claude's API returned ${status}. Try again in a moment.`;
+  }
+  return `Request failed with status ${status}.`;
+}
+
+async function safeFetch(fetchImpl, url, opts) {
+  try {
+    return await fetchImpl(url, opts);
+  } catch (err) {
+    throw new ConversationApiError(
+      "Couldn't reach claude.ai. Check your network connection.",
+      err,
+    );
+  }
+}
+
+async function safeJson(res, context) {
+  try {
+    return await res.json();
+  } catch (err) {
+    throw new ConversationApiError(
+      `Claude returned a non-JSON ${context} response.`,
+      err,
+    );
+  }
+}
+
 export function createConversationClient({ fetch = globalThis.fetch?.bind(globalThis) } = {}) {
   let cachedOrgIds = null;
   let preferredOrgId = null;
 
   async function getOrgIds() {
     if (cachedOrgIds) return cachedOrgIds;
-    const res = await fetch(API.ORGS, { credentials: 'include' });
+    const res = await safeFetch(fetch, API.ORGS, { credentials: 'include' });
     if (!res.ok) {
-      throw new ConversationApiError(`Org fetch failed: ${res.status}`);
+      throw new ConversationApiError(humanMessageForStatus(res.status, 'organizations'));
     }
-    const data = await res.json();
+    const data = await safeJson(res, 'organizations');
     if (!Array.isArray(data) || data.length === 0) {
-      throw new ConversationApiError('No organizations returned');
+      throw new ConversationApiError('Your account isn\'t in any organizations.');
     }
     cachedOrgIds = data.map((o) => o?.uuid).filter(Boolean);
     if (cachedOrgIds.length === 0) {
-      throw new ConversationApiError('No organization had a uuid');
+      throw new ConversationApiError('No organization had a uuid in the response.');
     }
     return cachedOrgIds;
   }
@@ -173,27 +213,22 @@ export function createConversationClient({ fetch = globalThis.fetch?.bind(global
 
     let lastStatus = null;
     for (const orgId of ordered) {
-      const res = await fetch(API.conversation(orgId, convUuid), {
+      const res = await safeFetch(fetch, API.conversation(orgId, convUuid), {
         credentials: 'include',
       });
       if (res.ok) {
         preferredOrgId = orgId;
-        let raw;
-        try {
-          raw = await res.json();
-        } catch (err) {
-          throw new ConversationApiError('Conversation response was not JSON', err);
-        }
+        const raw = await safeJson(res, 'conversation');
         return normalize(raw);
       }
       if (res.status === 404 || res.status === 403) {
         lastStatus = res.status;
         continue;
       }
-      throw new ConversationApiError(`Conversation fetch failed: ${res.status}`);
+      throw new ConversationApiError(humanMessageForStatus(res.status, 'conversation'));
     }
     throw new ConversationApiError(
-      `Conversation not found in any of your organizations (last status ${lastStatus}).`,
+      humanMessageForStatus(lastStatus ?? 404, 'conversation'),
     );
   }
 
