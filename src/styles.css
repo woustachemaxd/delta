@@ -58,3 +58,173 @@
   border-color: hsl(0 70% 50% / 0.4);
   color: hsl(0 70% 65%);
 }
+
+.cwe-copy-btn[data-variant="branch"] {
+  min-width: auto;
+  padding: 0 14px;
+  color: hsl(var(--accent-main-100, var(--text-100)));
+  background-color: hsl(var(--accent-main-100, var(--bg-300)) / 0.08);
+  border-color: hsl(var(--accent-main-100, var(--border-300)) / 0.35);
+}
+
+.cwe-copy-btn[data-variant="branch"]:hover {
+  background-color: hsl(var(--accent-main-100, var(--bg-300)) / 0.16);
+  border-color: hsl(var(--accent-main-100, var(--text-100)) / 0.5);
+  color: hsl(var(--accent-main-100, var(--text-100)));
+}
+
+.cwe-copy-btn[data-variant="branch"][data-state="loading"] {
+  opacity: 0.7;
+  cursor: progress;
+}
+
+.cwe-modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background-color: hsl(0 0% 0% / 0.55);
+  z-index: 2147483600;
+  font-family: inherit;
+}
+
+.cwe-modal {
+  position: fixed;
+  top: 8vh;
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(80vw, 920px);
+  height: min(80vh, 720px);
+  min-width: 360px;
+  min-height: 280px;
+  max-width: 95vw;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  background-color: hsl(var(--bg-100));
+  color: hsl(var(--text-100));
+  border: 1px solid hsl(var(--border-300, var(--bg-400, 0 0% 100% / 0.1)));
+  border-radius: 12px;
+  box-shadow: 0 24px 64px hsl(0 0% 0% / 0.35);
+  resize: both;
+  overflow: hidden;
+}
+
+.cwe-modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 16px;
+  border-bottom: 1px solid hsl(var(--border-300, var(--bg-300)));
+}
+
+.cwe-modal-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: hsl(var(--text-100));
+  letter-spacing: 0.01em;
+}
+
+.cwe-modal-icon-btn {
+  background: transparent;
+  border: none;
+  color: hsl(var(--text-300));
+  font-size: 22px;
+  line-height: 1;
+  padding: 0 6px;
+  cursor: pointer;
+  border-radius: 6px;
+  transition: background-color 140ms ease, color 140ms ease;
+}
+
+.cwe-modal-icon-btn:hover {
+  background-color: hsl(var(--bg-300));
+  color: hsl(var(--text-100));
+}
+
+.cwe-modal-body {
+  flex: 1 1 auto;
+  display: flex;
+  padding: 12px 16px;
+  overflow: hidden;
+}
+
+.cwe-modal-textarea {
+  flex: 1 1 auto;
+  width: 100%;
+  resize: none;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 12.5px;
+  line-height: 1.55;
+  padding: 14px;
+  background-color: hsl(var(--bg-200));
+  color: hsl(var(--text-100));
+  border: 1px solid hsl(var(--border-300, var(--bg-300)));
+  border-radius: 8px;
+  outline: none;
+}
+
+.cwe-modal-textarea:focus {
+  border-color: hsl(var(--accent-main-100, var(--text-100)) / 0.5);
+}
+
+.cwe-modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  padding: 12px 16px;
+  border-top: 1px solid hsl(var(--border-300, var(--bg-300)));
+}
+
+.cwe-modal-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 86px;
+  height: 32px;
+  padding: 0 14px;
+  font-size: 13px;
+  font-family: inherit;
+  font-weight: 500;
+  background-color: hsl(var(--bg-300));
+  border: 1px solid hsl(var(--border-300, var(--bg-400, 0 0% 100% / 0.08)));
+  border-radius: 8px;
+  color: hsl(var(--text-100));
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
+}
+
+.cwe-modal-btn:hover {
+  background-color: hsl(var(--bg-400, var(--bg-300)));
+}
+
+.cwe-modal-btn[data-state="success"],
+.cwe-modal-btn[data-state="success"]:hover {
+  background-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.18);
+  border-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.4);
+  color: hsl(var(--accent-main-100, 145 60% 45%));
+}
+
+.cwe-modal-btn[data-state="error"],
+.cwe-modal-btn[data-state="error"]:hover {
+  background-color: hsl(0 70% 50% / 0.18);
+  border-color: hsl(0 70% 50% / 0.4);
+  color: hsl(0 70% 65%);
+}
+
+.cwe-modal-error {
+  padding: 8px 4px;
+}
+
+.cwe-modal-error-heading {
+  font-size: 14px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: hsl(0 70% 65%);
+}
+
+.cwe-modal-error-detail {
+  font-size: 13px;
+  line-height: 1.55;
+  color: hsl(var(--text-200));
+  white-space: pre-wrap;
+  word-break: break-word;
+}
