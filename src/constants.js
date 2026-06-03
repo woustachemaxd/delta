@@ -14,12 +14,12 @@ export const SPLITTER = '-'.repeat(40);
 export const FRAMING =
   "I'd like to continue from a previous conversation; here it is.";
 
-export const MANIFEST_PREAMBLE =
-  "Files that were part of this conversation but aren't included below.\n" +
-  "Please ask me to share them if you need them:";
-
 export const MANIFEST_USER_HEADING = 'Files I attached:';
 export const MANIFEST_CLAUDE_HEADING = 'Files you (Claude) generated:';
+export const MANIFEST_TRAILING_INSTRUCTION =
+  "Ask the user to share any specific file if you need its contents — they aren't included here.";
+
+export const INLINE_TEXT_THRESHOLD_BYTES = 20480;
 
 export const API = {
   ORGS: '/api/organizations',
