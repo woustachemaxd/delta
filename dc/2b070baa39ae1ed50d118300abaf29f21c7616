@@ -1,0 +1,24 @@
+tests/transcriptBuilder.test.js
+  s_4d9c311ca3f956::t_ceff75210667b3 32-37
+  s_4d9c311ca3f956::t_51ebceafe7cd01 385-529
+  s_4d9c311ca3f956::t_9033d38a46d3d0 12
+src/transcriptBuilder.js
+  s_4d9c311ca3f956::t_3a038e1cf5864d 6
+  s_4d9c311ca3f956::t_c6f1ea737eae4f 81,83-96,101-107,113-114
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "dc2b070baa39ae1ed50d118300abaf29f21c7616",
+  "prompts": {},
+  "sessions": {
+    "s_4d9c311ca3f956": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "acc04715-81ec-41c9-a0e9-419cd06e73a2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "deepanshu <deepanshu1115@gmail.com>"
+    }
+  }
+}
