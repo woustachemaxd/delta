@@ -4,7 +4,7 @@ export const SELECTORS = {
   RESPONSE_CONTENT: '.font-claude-message, .font-claude-response',
 };
 
-export const MOUNT_MARKER_ATTR = 'data-cwe-mounted';
+export const MOUNT_MARKER_ATTR = 'data-delta-mounted';
 
 export const ROOT_PARENT_UUID = '00000000-0000-4000-8000-000000000000';
 

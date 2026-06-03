@@ -1,4 +1,4 @@
-.cwe-actions {
+.delta-actions {
   margin-top: 6px;
   display: flex;
   flex-direction: column;
@@ -6,13 +6,13 @@
   gap: 6px;
 }
 
-.cwe-actions-row {
+.delta-actions-row {
   display: inline-flex;
   align-items: center;
   gap: 4px;
 }
 
-.cwe-copy-btn {
+.delta-copy-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -37,36 +37,36 @@
     transform 80ms ease;
 }
 
-.cwe-copy-btn:hover {
+.delta-copy-btn:hover {
   background-color: hsl(var(--bg-400, var(--bg-300)));
   border-color: hsl(var(--border-300, var(--text-100) / 0.18));
   color: hsl(var(--text-100));
 }
 
-.cwe-copy-btn:active {
+.delta-copy-btn:active {
   transform: scale(0.97);
 }
 
-.cwe-copy-btn:focus-visible {
+.delta-copy-btn:focus-visible {
   outline: 2px solid hsl(var(--accent-main-100, var(--text-100)));
   outline-offset: 1px;
 }
 
-.cwe-copy-btn[data-state="success"],
-.cwe-copy-btn[data-state="success"]:hover {
+.delta-copy-btn[data-state="success"],
+.delta-copy-btn[data-state="success"]:hover {
   background-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.14);
   border-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.4);
   color: hsl(var(--accent-main-100, 145 60% 45%));
 }
 
-.cwe-copy-btn[data-state="error"],
-.cwe-copy-btn[data-state="error"]:hover {
+.delta-copy-btn[data-state="error"],
+.delta-copy-btn[data-state="error"]:hover {
   background-color: hsl(0 70% 50% / 0.14);
   border-color: hsl(0 70% 50% / 0.4);
   color: hsl(0 70% 65%);
 }
 
-.cwe-copy-btn[data-variant="branch"] {
+.delta-copy-btn[data-variant="branch"] {
   min-width: auto;
   height: 32px;
   padding: 0 18px;
@@ -78,18 +78,18 @@
   border-color: hsl(var(--accent-main-100, var(--border-300)) / 0.35);
 }
 
-.cwe-copy-btn[data-variant="branch"]:hover {
+.delta-copy-btn[data-variant="branch"]:hover {
   background-color: hsl(var(--accent-main-100, var(--bg-300)) / 0.16);
   border-color: hsl(var(--accent-main-100, var(--text-100)) / 0.5);
   color: hsl(var(--accent-main-100, var(--text-100)));
 }
 
-.cwe-copy-btn[data-variant="branch"][data-state="loading"] {
+.delta-copy-btn[data-variant="branch"][data-state="loading"] {
   opacity: 0.7;
   cursor: progress;
 }
 
-.cwe-modal-backdrop {
+.delta-modal-backdrop {
   position: fixed;
   inset: 0;
   background-color: hsl(0 0% 0% / 0.55);
@@ -97,7 +97,7 @@
   font-family: inherit;
 }
 
-.cwe-modal {
+.delta-modal {
   position: fixed;
   top: 8vh;
   left: 50%;
@@ -119,7 +119,7 @@
   overflow: hidden;
 }
 
-.cwe-modal-header {
+.delta-modal-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -127,14 +127,14 @@
   border-bottom: 1px solid hsl(var(--border-300, var(--bg-300)));
 }
 
-.cwe-modal-title {
+.delta-modal-title {
   font-size: 14px;
   font-weight: 600;
   color: hsl(var(--text-100));
   letter-spacing: 0.01em;
 }
 
-.cwe-modal-icon-btn {
+.delta-modal-icon-btn {
   background: transparent;
   border: none;
   color: hsl(var(--text-300));
@@ -146,19 +146,19 @@
   transition: background-color 140ms ease, color 140ms ease;
 }
 
-.cwe-modal-icon-btn:hover {
+.delta-modal-icon-btn:hover {
   background-color: hsl(var(--bg-300));
   color: hsl(var(--text-100));
 }
 
-.cwe-modal-body {
+.delta-modal-body {
   flex: 1 1 auto;
   display: flex;
   padding: 12px 16px;
   overflow: hidden;
 }
 
-.cwe-modal-textarea {
+.delta-modal-textarea {
   flex: 1 1 auto;
   width: 100%;
   resize: none;
@@ -173,11 +173,11 @@
   outline: none;
 }
 
-.cwe-modal-textarea:focus {
+.delta-modal-textarea:focus {
   border-color: hsl(var(--accent-main-100, var(--text-100)) / 0.5);
 }
 
-.cwe-modal-footer {
+.delta-modal-footer {
   display: flex;
   justify-content: flex-end;
   gap: 8px;
@@ -185,7 +185,7 @@
   border-top: 1px solid hsl(var(--border-300, var(--bg-300)));
 }
 
-.cwe-modal-btn {
+.delta-modal-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -203,36 +203,36 @@
   transition: background-color 140ms ease, border-color 140ms ease, color 140ms ease;
 }
 
-.cwe-modal-btn:hover {
+.delta-modal-btn:hover {
   background-color: hsl(var(--bg-400, var(--bg-300)));
 }
 
-.cwe-modal-btn[data-state="success"],
-.cwe-modal-btn[data-state="success"]:hover {
+.delta-modal-btn[data-state="success"],
+.delta-modal-btn[data-state="success"]:hover {
   background-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.18);
   border-color: hsl(var(--accent-main-100, 145 60% 45%) / 0.4);
   color: hsl(var(--accent-main-100, 145 60% 45%));
 }
 
-.cwe-modal-btn[data-state="error"],
-.cwe-modal-btn[data-state="error"]:hover {
+.delta-modal-btn[data-state="error"],
+.delta-modal-btn[data-state="error"]:hover {
   background-color: hsl(0 70% 50% / 0.18);
   border-color: hsl(0 70% 50% / 0.4);
   color: hsl(0 70% 65%);
 }
 
-.cwe-modal-error {
+.delta-modal-error {
   padding: 8px 4px;
 }
 
-.cwe-modal-error-heading {
+.delta-modal-error-heading {
   font-size: 14px;
   font-weight: 600;
   margin-bottom: 8px;
   color: hsl(0 70% 65%);
 }
 
-.cwe-modal-error-detail {
+.delta-modal-error-detail {
   font-size: 13px;
   line-height: 1.55;
   color: hsl(var(--text-200));
