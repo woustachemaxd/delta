@@ -1,6 +1,6 @@
-# claude-web-ext
+# Delta
 
-A small browser extension that adds two features to the Claude web UI:
+A small browser extension that adds power-user tools to the Claude web UI:
 
 1. **Copy** any Claude response as **Plain**, **Markdown**, or **Rich** (HTML).
 2. **Branch from here** — open a transcript of every turn up to and including a chosen Claude response, copy or download it, and paste it into a new chat to continue from that point.

@@ -261,7 +261,7 @@ A pragmatic build order:
 
 ### Naming
 
-Working name: `claude-web-ext`. A real product name can be chosen before publishing to the extension stores.
+Product name: **Delta**. The Δ doubles as the mathematical "change" symbol and a river delta where one channel fans out — both nods to branching conversations.
 
 ### Open follow-ups
 
