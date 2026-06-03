@@ -1,0 +1,19 @@
+README.md
+  s_4d9c311ca3f956::t_4d4225aa1b930c 1-59
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "2ca8023af42b4bb4e9bbfd0eb46db798821368c9",
+  "prompts": {},
+  "sessions": {
+    "s_4d9c311ca3f956": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "acc04715-81ec-41c9-a0e9-419cd06e73a2",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "deepanshu <deepanshu1115@gmail.com>"
+    }
+  }
+}
