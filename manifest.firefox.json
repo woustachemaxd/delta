@@ -1,11 +1,11 @@
 {
   "manifest_version": 3,
-  "name": "Claude Web Ext",
+  "name": "Delta",
   "version": "0.1.0",
-  "description": "Companion features for the Claude web UI.",
+  "description": "Power-user tools for Claude.ai conversations — copy in multiple formats and branch from here.",
   "browser_specific_settings": {
     "gecko": {
-      "id": "claude-web-ext@deepanshu.local",
+      "id": "delta@deepanshu.local",
       "strict_min_version": "121.0"
     }
   },
