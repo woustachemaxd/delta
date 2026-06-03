@@ -23,5 +23,12 @@ export function createHtmlToFormat({ TurndownService, gfmTables }) {
     markdown(node) {
       return turndown.turndown(stripInteractive(node).innerHTML);
     },
+    plain(node) {
+      const cleaned = stripInteractive(node);
+      return cleaned.innerText || cleaned.textContent;
+    },
+    html(node) {
+      return stripInteractive(node).outerHTML;
+    },
   };
 }
