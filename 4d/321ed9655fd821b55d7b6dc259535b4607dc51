@@ -1,0 +1,19 @@
+.gitignore
+  s_6062b9f70f80ad::t_6bd5cf0be13c09 4
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.5.2",
+  "base_commit_sha": "4d321ed9655fd821b55d7b6dc259535b4607dc51",
+  "prompts": {},
+  "sessions": {
+    "s_6062b9f70f80ad": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "e7356a62-2846-47ee-b9bb-260e3bdd1a82",
+        "model": "claude-opus-4-7"
+      },
+      "human_author": "deepanshu <deepanshu1115@gmail.com>"
+    }
+  }
+}
