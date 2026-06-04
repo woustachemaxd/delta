@@ -7,6 +7,7 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "build": "node scripts/build.js",
+    "package:chrome": "npm run build && cd dist/chrome && zip -r ../delta-chrome.zip .",
     "vendor": "cp node_modules/turndown/dist/turndown.js vendor/turndown.js && cp node_modules/turndown-plugin-gfm/dist/turndown-plugin-gfm.js vendor/turndown-plugin-gfm.js"
   },
   "devDependencies": {

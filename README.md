@@ -7,7 +7,39 @@ A small browser extension that adds power-user tools to the Claude web UI:
 
 The extension is content-script-only. No background pages, no remote services, no bundler.
 
-## Project layout
+## Install — Chrome / Chromium
+
+1. Download `delta-chrome.zip` from the [latest release](https://github.com/woustachemaxd/delta/releases/latest).
+2. Unzip it somewhere permanent (the extension loads from this folder — don't delete it).
+3. Visit `chrome://extensions`.
+4. Toggle **Developer mode** (top right).
+5. Click **Load unpacked** and pick the unzipped folder.
+6. Open `https://claude.ai/chat/...` and reload the tab.
+
+To update: download the new release, unzip over the existing folder, and click the refresh icon on the extension card.
+
+## Install — Firefox / Zen
+
+Coming soon. Firefox requires Mozilla-signed `.xpi` files for stable distribution; once signed, the install path becomes a one-click `.xpi` download.
+
+In the meantime, see [Develop](#develop) below for the temporary-add-on flow.
+
+## Permissions
+
+The extension only runs on `https://claude.ai/chat/*`. It makes no outbound `fetch` calls to any host other than `claude.ai` (locked in by a test in `tests/conversationClient.test.js`).
+
+## Develop
+
+```
+npm install
+npm test                    # vitest run
+npm run build               # rebuilds dist/chrome/ and dist/firefox/
+npm run package:chrome      # builds + zips dist/chrome/ into dist/delta-chrome.zip
+```
+
+There is no watcher — re-run `npm run build` after editing `src/`.
+
+### Project layout
 
 ```
 src/            Runtime modules (ES modules, loaded via loader.js)
@@ -18,42 +50,15 @@ dist/chrome/    Loadable unpacked extension for Chrome
 dist/firefox/   Loadable temporary add-on for Firefox / Zen
 ```
 
-## Develop
+### Load unpacked from source
 
-```
-npm install
-npm test              # vitest run, 90+ tests
-npm run build         # rebuilds dist/chrome/ and dist/firefox/
-```
+For Chrome, follow the install steps above but pick `dist/chrome/` after `npm run build` instead of an unzipped release.
 
-There is no watcher — re-run `npm run build` after editing `src/`.
-
-## Install — Chrome / Chromium
+For Firefox / Zen (temporary add-on, unloaded on browser quit):
 
 1. `npm run build`
-2. Visit `chrome://extensions`
-3. Toggle **Developer mode** (top right)
-4. Click **Load unpacked**
-5. Pick the `dist/chrome/` directory
-6. Open `https://claude.ai/chat/...` and reload the tab
-
-After editing source: rebuild, then click the refresh icon on the extension card and reload the Claude tab.
-
-## Install — Firefox / Zen
-
-Firefox-based browsers (including Zen) load unpacked extensions as **temporary add-ons** — they survive the current session and are unloaded on browser quit.
-
-1. `npm run build`
-2. Visit `about:debugging`
-3. Click **This Firefox** (or **This Zen** etc.) in the sidebar
-4. Click **Load Temporary Add-on…**
-5. Pick **any single file** inside `dist/firefox/` (for example, `manifest.json`) — Firefox loads the whole containing directory
-6. Open `https://claude.ai/chat/...` and reload the tab
+2. Visit `about:debugging` → **This Firefox** → **Load Temporary Add-on…**
+3. Pick any file inside `dist/firefox/` (Firefox loads the whole containing folder).
+4. Open `https://claude.ai/chat/...` and reload the tab.
 
 After editing source: rebuild, return to `about:debugging`, and click **Reload** on the extension's card.
-
-> Zen-specific note: the experience is identical to Firefox, since Zen tracks Firefox releases. If a feature works in Firefox but not Zen, file it as a follow-up.
-
-## Permissions
-
-The extension only runs on `https://claude.ai/chat/*`. It makes no outbound `fetch` calls to any host other than `claude.ai` (locked in by a test in `tests/conversationClient.test.js`).
