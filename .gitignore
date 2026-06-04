@@ -1,5 +1,6 @@
 node_modules/
 dist/
 .claude/
+PRD.md
 .DS_Store
 *.log
